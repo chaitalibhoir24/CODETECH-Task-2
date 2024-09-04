@@ -1,0 +1,83 @@
+/* */
+
+CREATE DATABASE STUDENT_INFO
+CREATE TABLE Student(
+    StudentID INT PRIMARY KEY IDENTITY(1,1),
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+    DateOfBirth DATE,
+    Email NVARCHAR(100)
+);
+INSERT INTO Student (FirstName, LastName, DateOfBirth, Email)
+VALUES 
+('John', 'Doe', '2000-01-15', 'john.doe@example.com'),
+('Jane', 'Smith', '1999-05-30', 'jane.smith@example.com');
+SELECT * FROM student
+CREATE TABLE Course(
+    CourseID INT PRIMARY KEY IDENTITY(1,1),
+    CourseName NVARCHAR(100) NOT NULL,
+    CourseCode NVARCHAR(10) UNIQUE NOT NULL,
+    Credits INT
+);
+INSERT INTO Course (CourseName, CourseCode, Credits)
+VALUES 
+('Database Systems', 'DB101', 3),
+('Data Structures', 'CS102', 4);
+select * from course
+CREATE TABLE Enrollment(
+    EnrollmentID INT PRIMARY KEY IDENTITY(1,1),
+    StudentID INT FOREIGN KEY REFERENCES Student(StudentID),
+    CourseID INT FOREIGN KEY REFERENCES Course(CourseID),
+    Grade CHAR(2)
+);
+INSERT INTO Enrollment (StudentID, CourseID, Grade)
+VALUES (1, 1, 'A'),(2, 2, 'B');
+select*from Enrollment
+--inner JOIN
+SELECT 
+    Student.FirstName, 
+    Student.LastName, 
+    Course.CourseName, 
+    Enrollment.Grade
+FROM 
+    Enrollment
+INNER JOIN 
+    Student ON Enrollment.StudentID = Student.StudentID
+INNER JOIN 
+    Course ON Enrollment.CourseID = Course.CourseID;
+--left JOIN
+SELECT 
+    Student.FirstName, 
+    Student.LastName, 
+    Course.CourseName, 
+    Enrollment.Grade
+FROM 
+    Student
+LEFT JOIN 
+    Enrollment ON Student.StudentID = Enrollment.StudentID
+LEFT JOIN 
+    Course ON Enrollment.CourseID = Course.CourseID;
+--Right JOIN
+SELECT 
+    Student.FirstName, 
+    Student.LastName, 
+    Course.CourseName, 
+    Enrollment.Grade
+FROM 
+    Course
+RIGHT JOIN 
+    Enrollment ON Course.CourseID = Enrollment.CourseID
+RIGHT JOIN 
+    Student ON Enrollment.StudentID = Student.StudentID;
+--Full outer JOIN
+SELECT 
+    Student.FirstName, 
+    Student.LastName, 
+    Course.CourseName, 
+    Enrollment.Grade
+FROM 
+    Student
+FULL OUTER JOIN 
+    Enrollment ON Student.StudentID = Enrollment.StudentID
+FULL OUTER JOIN 
+    Course ON Enrollment.CourseID = Course.CourseID;
